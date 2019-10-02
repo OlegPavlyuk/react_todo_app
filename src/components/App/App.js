@@ -27,7 +27,7 @@ export default class App extends Component {
     };
   }
 
-  onTogglePropertyValue(array, id, property) {
+  togglePropertyValue(array, id, property) {
     const index = array.findIndex(el => el.id === id);
     const oldItem = array[index];
     const newItem = {
@@ -71,7 +71,7 @@ export default class App extends Component {
 
   onToggleDone = id => {
     this.setState(({ todoData }) => {
-      const newArray = this.onTogglePropertyValue(todoData, id, 'done');
+      const newArray = this.togglePropertyValue(todoData, id, 'done');
 
       return {
         todoData: newArray
@@ -81,7 +81,7 @@ export default class App extends Component {
 
   onToggleImportant = id => {
     this.setState(({ todoData }) => {
-      const newArray = this.onTogglePropertyValue(todoData, id, 'important');
+      const newArray = this.togglePropertyValue(todoData, id, 'important');
 
       return {
         todoData: newArray
@@ -90,9 +90,10 @@ export default class App extends Component {
   };
 
   render() {
-    const doneCount = this.state.todoData.filter(el => el.done).length;
+    const { todoData } = this.state;
+    const doneCount = todoData.filter(el => el.done).length;
 
-    const todoCount = this.state.todoData.length - doneCount;
+    const todoCount = todoData.length - doneCount;
 
     return (
       <div className="todo-app">
@@ -103,7 +104,7 @@ export default class App extends Component {
         </div>
 
         <TodoList
-          todos={this.state.todoData}
+          todos={todoData}
           onDeleted={this.deleteItem}
           onToggleDone={this.onToggleDone}
           onToggleImportant={this.onToggleImportant}
