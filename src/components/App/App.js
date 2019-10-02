@@ -12,6 +12,7 @@ export default class App extends Component {
 
   state = {
     term: '',
+    filter: 'all',
     todoData: [
       this.createTodoItem('Drink coffe'),
       this.createTodoItem('Crete React App'),
@@ -25,7 +26,24 @@ export default class App extends Component {
     return items.filter(item => item.label.toLowerCase().includes(term));
   };
 
-  onChangeTerm = string => {
+  filter = (items, filter) => {
+    switch (filter) {
+      case 'all':
+        return items;
+      case 'active':
+        return items.filter(item => !item.done);
+      case 'done':
+        return items.filter(item => item.done);
+      default:
+        return items;
+    }
+  };
+
+  onFilterChange = filter => {
+    this.setState({ filter });
+  };
+
+  onSearchChange = string => {
     this.setState({
       term: string
     });
@@ -103,9 +121,9 @@ export default class App extends Component {
   };
 
   render() {
-    const { todoData, term } = this.state;
+    const { todoData, term, filter } = this.state;
 
-    const visibleTodos = this.search(todoData, term);
+    const visibleTodos = this.filter(this.search(todoData, term), filter);
     const doneCount = todoData.filter(el => el.done).length;
 
     const todoCount = todoData.length - doneCount;
@@ -114,8 +132,11 @@ export default class App extends Component {
       <div className="todo-app">
         <AppHeader toDo={todoCount} done={doneCount} />
         <div className="top-panel d-flex">
-          <SearchPanel onChangeTerm={this.onChangeTerm} />
-          <ItemStatusFilter />
+          <SearchPanel onSearchChange={this.onSearchChange} />
+          <ItemStatusFilter
+            filter={this.state.filter}
+            onFilterChange={this.onFilterChange}
+          />
         </div>
 
         <TodoList

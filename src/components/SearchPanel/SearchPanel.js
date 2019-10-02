@@ -2,9 +2,9 @@ import React from 'react';
 
 import './SearchPanel.css';
 
-const SearchPanel = ({ onChangeTerm }) => {
+const SearchPanel = ({ onSearchChange }) => {
   const onChange = e => {
-    onChangeTerm(e.target.value.toLowerCase());
+    onSearchChange(e.target.value.toLowerCase());
   };
 
   return (
